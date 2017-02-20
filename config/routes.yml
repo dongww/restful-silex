@@ -1,0 +1,3 @@
+users:
+    resource: routing/user.yml
+    prefix: /api/v1

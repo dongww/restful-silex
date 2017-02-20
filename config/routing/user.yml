@@ -1,0 +1,3 @@
+all_user:
+    path: /
+    defaults: { _controller: 'Controller\UserController::all' }
