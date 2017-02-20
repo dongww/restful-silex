@@ -35,7 +35,7 @@ class Query
 
     public static function createFromRequest(Request $request)
     {
-        $query = new Query($request);
+        return new Query($request);
     }
 
     public static function explodeBySeparator($str)
