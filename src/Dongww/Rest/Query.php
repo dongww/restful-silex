@@ -7,8 +7,7 @@
 
 namespace Dongww\Rest;
 
-
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class Query
 {
@@ -22,35 +21,36 @@ class Query
     const DOT       = '.';
 
     /**
-     * @var Request
+     * @var ParameterBag
      */
-    private $request;
-    private $perPage;
+    private $rawQuery;
+    public  $defaultPerPage;
+    public  $page;
+    public  $perPage;
+    public  $sort;
+    public  $fields;
+    public $embed;
 
-    private function __construct(Request $request, $perPage = 10)
+    public function __construct(ParameterBag $query, $defaultPerPage = 10)
     {
-        $this->request = $request;
-        $this->perPage = (int)$perPage;
+        $this->rawQuery       = $query;
+        $this->defaultPerPage = $defaultPerPage;
+
+        $this->perPage = $this->getPerPage();
+        $this->sort    = $this->getSort();
+        $this->fields  = $this->getFields();
+        $this->page    = $this->getPage();
+        $this->embed  = $this->getEmbed();
     }
 
-    public static function createFromRequest(Request $request)
-    {
-        return new Query($request);
-    }
-
-    public static function explodeBySeparator($str)
+    protected static function explodeBySeparator($str)
     {
         return explode(static::SEPARATOR, $str);
     }
 
-    public static function explodeByDot($str)
+    protected static function explodeByDot($str)
     {
         return explode(static::DOT, $str);
-    }
-
-    public function raw($name)
-    {
-        return $this->request->query->get($name);
     }
 
     /**
@@ -58,9 +58,9 @@ class Query
      *
      * @return array|null
      */
-    public function getSort()
+    protected function getSort()
     {
-        $sort = $this->raw(static::KEYWORD_SORT);
+        $sort = $this->rawQuery->get(static::KEYWORD_SORT);
 
         if(!$sort) {
             return null;
@@ -70,10 +70,10 @@ class Query
 
         foreach (static::explodeBySeparator($sort) as $item) {
             if($item[0] == '-') {
-                $by = 'DESC';
+                $by    = 'DESC';
                 $order = substr($item, 1);
             } else {
-                $by = 'ASC';
+                $by    = 'ASC';
                 $order = $item;
             }
 
@@ -91,9 +91,9 @@ class Query
      *
      * @return array|null
      */
-    public function getFields()
+    protected function getFields()
     {
-        $fields = $this->raw(static::KEYWORD_FIELDS);
+        $fields = $this->rawQuery->get(static::KEYWORD_FIELDS);
 
         if(!$fields) {
             return null;
@@ -102,18 +102,18 @@ class Query
         return static::explodeBySeparator($fields);
     }
 
-    public function getPage()
+    protected function getPage()
     {
-        $page = (int)$this->raw(static::KEYWORD_PAGE);
+        $page = (int)$this->rawQuery->get(static::KEYWORD_PAGE);
 
         return $page ?: 1;
     }
 
-    public function getPerPage()
+    protected function getPerPage()
     {
-        $perPage = (int)$this->raw(static::KEYWORD_PER_PAGE);
+        $perPage = (int)$this->rawQuery->get(static::KEYWORD_PER_PAGE);
 
-        return $perPage ?: $this->perPage;
+        return $perPage ?: $this->defaultPerPage;
     }
 
     /**
@@ -121,9 +121,9 @@ class Query
      *
      * @return array|null
      */
-    public function getEmbed()
+    protected function getEmbed()
     {
-        $embed = $this->raw(static::KEYWORD_EMBED);
+        $embed = $this->rawQuery->get(static::KEYWORD_EMBED);
 
         if(!$embed) {
             return null;

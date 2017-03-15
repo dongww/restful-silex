@@ -54,7 +54,7 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
         }
 
         if(!$app['debug']) {
-            $app->error(function (\Exception $e, Request $request, $code) use($app) {
+            $app->error(function (\Exception $e, Request $request, $code) use ($app) {
                 if($code == 500 && $app['debug']) {
                     $message = $app['rest.default_error_messages'][$code];
                 } else {
@@ -69,12 +69,5 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
                 );
             });
         }
-
-        $app->before(function (Request $request) {
-            if(0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
-                $data = json_decode($request->getContent(), true);
-                $request->attributes->set('body', $data);
-            }
-        });
     }
 }

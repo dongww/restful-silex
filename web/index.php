@@ -1,4 +1,5 @@
 <?php
+use Dongww\Rest\Http\Request;
 use SilexRestful\Rest\Application;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -21,4 +22,4 @@ require_once __DIR__ . '/../config/main.php';
 //    return $app->notFound();
 //});
 
-$app->run();
+$app->run(Request::createFromGlobals());
