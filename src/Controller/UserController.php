@@ -7,15 +7,14 @@
 namespace Controller;
 
 use Dongww\Rest\Http\Request;
-use SilexRestful\Rest\Application;
+use Dongww\Silex\RestApplication;
 
 class UserController
 {
-    public function all(Application $app, Request $request)
+    public function all(RestApplication $app, Request $request)
     {
         $response = $app['http.client']->get('categories/roots');
 
         return $app->json($response->getBody());
-        //        return $app->unauthorized();
     }
 }

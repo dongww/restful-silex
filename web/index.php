@@ -1,10 +1,11 @@
 <?php
 use Dongww\Rest\Http\Request;
-use SilexRestful\Rest\Application;
+use Dongww\Silex\RestApplication;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$app = new Application();
+$app = new RestApplication();
+
 $app['debug'] = false;
 
 require_once __DIR__ . '/../config/main.php';

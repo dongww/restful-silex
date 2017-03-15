@@ -4,13 +4,12 @@
  * Date: 2017/1/19
  * Time: 14:50
  */
-
-namespace SilexRestful\Rest;
+namespace Dongww\Silex;
 
 use Dongww\Silex\RestTrait;
-use Silex\Application as BaseApp;
+use Silex\Application;
 
-class Application extends BaseApp
+class RestApplication extends Application
 {
     use RestTrait;
 }
