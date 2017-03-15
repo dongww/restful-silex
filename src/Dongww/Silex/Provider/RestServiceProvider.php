@@ -6,6 +6,7 @@
  */
 namespace Dongww\Silex\Provider;
 
+use Dongww\Rest\Exception\ExceptionInterface;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\BootableProviderInterface;
@@ -24,7 +25,7 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
             400 => '参数列表错误(缺少，格式不匹配)',
             401 => '未授权',
             403 => '访问受限，授权过期',
-            404 => '资源，服务未找到',
+            404 => '资源、服务未找到',
             405 => '不允许的http方法',
             409 => '资源冲突，重复的资源 ',
             500 => '系统内部错误',
@@ -54,7 +55,11 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
 
         if(!$app['debug']) {
             $app->error(function (\Exception $e, Request $request, $code) use ($app) {
-                $message = $e->getMessage() ?: $app['rest.code_default_messages'][$code];
+                if($e instanceof ExceptionInterface) {
+                    $message = $e->getMessage();
+                } else {
+                    $message = $app['rest.code_default_messages'][$code];
+                }
 
                 return $app->json(
                     [

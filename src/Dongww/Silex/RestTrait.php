@@ -6,11 +6,11 @@
  */
 namespace Dongww\Silex;
 
-use Dongww\Silex\Exception\NotImplementedException;
+use Dongww\Rest\Exception\AccessDeniedHttpException;
+use Dongww\Rest\Exception\NotFoundHttpException;
+use Dongww\Rest\Exception\NotImplementedException;
+use Dongww\Rest\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 trait RestTrait
 {
