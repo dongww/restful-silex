@@ -14,6 +14,13 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 trait RestTrait
 {
+    /**
+     * @param array $data
+     * @param int   $status
+     * @param array $headers
+     *
+     * @return JsonResponse
+     */
     public function json($data = [], $status = 200, array $headers = [])
     {
         $headers = $headers + $this['rest.headers'];

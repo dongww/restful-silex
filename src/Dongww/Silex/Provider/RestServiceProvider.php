@@ -18,7 +18,6 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
     public function register(Container $app)
     {
         $app['rest.auto_options'] = true;
-        $app['rest.auto_json'] = true;
         $app['rest.allow_origin'] = '*';
 
         $app['rest.code_default_messages'] = [
@@ -55,11 +54,7 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
 
         if(!$app['debug']) {
             $app->error(function (\Exception $e, Request $request, $code) use ($app) {
-                if($code == 500 && $app['debug']) {
-                    $message = $app['rest.default_error_messages'][$code];
-                } else {
-                    $message = $e->getMessage() ?: $app['rest.default_error_messages'][$code];
-                }
+                $message = $e->getMessage() ?: $app['rest.code_default_messages'][$code];
 
                 return $app->json(
                     [
