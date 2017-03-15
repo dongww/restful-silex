@@ -4,11 +4,13 @@
  * Date: 2017/2/13
  * Time: 11:15
  */
-
 namespace Dongww\Silex;
 
-
+use Dongww\Silex\Exception\NotImplementedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 trait RestTrait
 {
@@ -52,7 +54,10 @@ trait RestTrait
      */
     public function unauthorized($message = '', array $headers = [])
     {
-        return $this->abort(401, $this->abortMessage($message, 401), $headers);
+        $ex = new UnauthorizedHttpException('', $this->codeMessage($message, 401));
+        $ex->setHeaders($headers);
+
+        throw $ex;
     }
 
     /**
@@ -63,7 +68,10 @@ trait RestTrait
      */
     public function forbidden($message = '', array $headers = [])
     {
-        return $this->abort(403, $this->abortMessage($message, 403), $headers);
+        $ex = new AccessDeniedHttpException($this->codeMessage($message, 403));
+        $ex->setHeaders($headers);
+
+        throw $ex;
     }
 
     /**
@@ -74,7 +82,10 @@ trait RestTrait
      */
     public function notFound($message = '', array $headers = [])
     {
-        return $this->abort(404, $this->abortMessage($message, 404), $headers);
+        $ex = new NotFoundHttpException($this->codeMessage($message, 404));
+        $ex->setHeaders($headers);
+
+        throw $ex;
     }
 
     /**
@@ -85,11 +96,14 @@ trait RestTrait
      */
     public function notImplemented($message = '', array $headers = [])
     {
-        return $this->abort(501, $this->abortMessage($message, 501), $headers);
+        $ex = new NotImplementedException($this->codeMessage($message, 501));
+        $ex->setHeaders($headers);
+
+        throw $ex;
     }
 
-    private function abortMessage($message, $code)
+    private function codeMessage($message, $code)
     {
-        return $message ?: $this['rest.default_error_messages'][$code];
+        return $message ?: $this['rest.code_default_messages'][$code];
     }
 }

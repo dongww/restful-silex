@@ -21,7 +21,7 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
         $app['rest.auto_json'] = true;
         $app['rest.allow_origin'] = '*';
 
-        $app['rest.default_error_messages'] = [
+        $app['rest.code_default_messages'] = [
             400 => '参数列表错误(缺少，格式不匹配)',
             401 => '未授权',
             403 => '访问受限，授权过期',
