@@ -6,7 +6,6 @@
  */
 namespace Dongww\Silex;
 
-use Dongww\Silex\RestTrait;
 use Silex\Application;
 
 class RestApplication extends Application
