@@ -55,6 +55,8 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
 
         if(!$app['debug']) {
             $app->error(function (\Exception $e, Request $request, $code) use ($app) {
+                $code = $code ?: 500;
+
                 if($e instanceof ExceptionInterface) {
                     $message = $e->getMessage();
                 } else {
