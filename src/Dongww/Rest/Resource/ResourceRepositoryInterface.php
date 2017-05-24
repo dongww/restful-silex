@@ -6,7 +6,7 @@
  * Time: 10:01
  */
 
-namespace Dongww\Rest;
+namespace Dongww\Rest\Resource;
 
 
 interface ResourceRepositoryInterface

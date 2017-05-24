@@ -6,10 +6,10 @@
  * Time: 10:00
  */
 
-namespace Dongww\Rest;
+namespace Dongww\Rest\Resource;
 
 
 interface ResourceInterface
 {
-
+    public function filterByGroup($groupName);
 }
