@@ -1,3 +1,7 @@
 all_user:
     path: /
-    defaults: { _controller: 'Controller\UserController::all' }
+    defaults: { _controller: 'Controller\UserController::all', _auth: true }
+
+auth:
+    path: /auth
+    defaults: { _controller: 'Controller\UserController::authentication' }

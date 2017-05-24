@@ -4,17 +4,21 @@
  * Date: 2017/2/13
  * Time: 11:15
  */
+
 namespace Dongww\Silex\Provider;
 
 use Dongww\Rest\Exception\ExceptionInterface;
+use Dongww\Silex\EventListener\AuthListener;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\BootableProviderInterface;
+use Silex\Api\EventListenerProviderInterface;
 use Silex\Application;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RestServiceProvider implements ServiceProviderInterface, BootableProviderInterface
+class RestServiceProvider implements ServiceProviderInterface, BootableProviderInterface, EventListenerProviderInterface
 {
     public function register(Container $app)
     {
@@ -41,6 +45,10 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
             'Access-Control-Expose-Headers'    => 'X-Auth-Token',
             'Allow'                            => 'POST, GET, OPTIONS, DELETE, PUT',
         ];
+
+        $app['auth.listener'] = function () {
+            return new AuthListener();
+        };
     }
 
     public function boot(Application $app)
@@ -71,5 +79,10 @@ class RestServiceProvider implements ServiceProviderInterface, BootableProviderI
                 );
             });
         }
+    }
+
+    public function subscribe(Container $app, EventDispatcherInterface $dispatcher)
+    {
+        $dispatcher->addSubscriber($app['auth.listener']);
     }
 }
