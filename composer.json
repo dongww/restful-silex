@@ -1,4 +1,8 @@
 {
+    "name": "dongww/restful-silex",
+    "license": "MIT",
+    "type": "project",
+    "description": "基于 PHP 框架 Silex 构建的，用于 Restful 风格接口的框架。可用于快速开发后端接口。",
     "require": {
         "silex/silex": "^2.0",
         "guzzlehttp/guzzle": "^6.2",
